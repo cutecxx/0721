@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>万圣节礼物</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #2c0b3a, #6a0dad);
+            font-family: 'Microsoft YaHei', sans-serif;
+            overflow: hidden;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .gift-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            text-align: center;
+            max-width: 400px;
+            border: 2px solid #ff9500;
+        }
+        
+        .gift-title {
+            font-size: 24px;
+            font-weight: bold;
+            color: #8b4513;
+            margin-bottom: 20px;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+        }
+        
+        .gift-icon {
+            font-size: 60px;
+            margin-bottom: 20px;
+            color: #ff9500;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .open-btn {
+            background: linear-gradient(45deg, #ff9500, #ff5500);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 30px;
+            cursor: pointer;
+            font-size: 18px;
+            font-weight: bold;
+            box-shadow: 0 5px 15px rgba(255, 149, 0, 0.4);
+            transition: all 0.3s ease;
+            margin-top: 10px;
+        }
+        
+        .open-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 7px 20px rgba(255, 149, 0, 0.6);
+        }
+        
+        .open-btn:active {
+            transform: scale(0.95);
+        }
+        
+        .instructions {
+            margin-top: 20px;
+            color: #666;
+            text-align: center;
+            font-size: 14px;
+            max-width: 300px;
+            background: rgba(255, 255, 255, 0.8);
+            padding: 10px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .tip-window {
+            position: fixed;
+            width: 250px;
+            height: 60px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            font-size: 16px;
+            font-weight: bold;
+            z-index: 100;
+            transition: transform 0.2s ease;
+            cursor: pointer;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .tip-window:hover {
+            transform: scale(1.05);
+        }
+        
+        .counter {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: white;
+            padding: 10px 15px;
+            border-radius: 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            font-size: 14px;
+            color: #666;
+            z-index: 2000;
+        }
+        
+        .halloween-decoration {
+            position: fixed;
+            font-size: 40px;
+            opacity: 0.3;
+            z-index: 50;
+        }
+        
+        .bat {
+            position: fixed;
+            width: 50px;
+            height: 30px;
+            background-color: #333;
+            border-radius: 50%;
+            z-index: 50;
+            animation: fly 15s linear infinite;
+        }
+        
+        @keyframes fly {
+            0% { transform: translate(0, 0) rotate(0deg); }
+            100% { transform: translate(100vw, 100vh) rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <!-- 万圣节装饰 -->
+    <div class="halloween-decoration" style="top: 10%; left: 5%;">🎃</div>
+    <div class="halloween-decoration" style="top: 15%; right: 10%;">👻</div>
+    <div class="halloween-decoration" style="bottom: 10%; left: 15%;">🦇</div>
+    <div class="halloween-decoration" style="bottom: 15%; right: 5%;">🕷️</div>
+    
+    <!-- 蝙蝠装饰 -->
+    <div class="bat" style="top: 20%; left: 10%; animation-delay: 0s;"></div>
+    <div class="bat" style="top: 60%; left: 5%; animation-delay: 3s;"></div>
+    <div class="bat" style="top: 40%; left: 15%; animation-delay: 6s;"></div>
+    
+    <div class="gift-container">
+        <div class="gift-icon">🎁</div>
+        <div class="gift-title">您有一份万圣节礼物，确定要打开吗?</div>
+        <button class="open-btn" id="openBtn">确定打开</button>
+        <div class="instructions">
+		O.0
+            <!-- 作者：陈雪霞她die  -->
+        </div>
+    </div>
+    
+    <div class="counter">
+        ♥: <span id="windowCount">0</span>
+    </div>
+
+    <script>
+        // 提示文字列表
+        const tips = [
+            '多喝水哦~ ♥', '保持微笑呀 ♥', '每天都要元气满满 ♥',
+            '记得吃水果 ♥', '保持好心情 ♥', '好好爱自己 ♥', '祝眉目舒展，顺问冬安。 ♥',
+            '梦想成真 ♥', '期待下一次见面 ♥', '金榜题名 ♥',
+            '顺顺利利 ♥', '早点休息', '愿所有烦恼都消失 ♥',
+            '别熬夜 ♥', '一切尽意·百事从欢 ♥', '天冷了，多穿衣服 ♥'
+        ];
+
+        // 背景颜色列表
+        const bgColors = [
+            'lightpink', 'skyblue', 'lightgreen', 'lavender',
+            'lightyellow', 'plum', 'coral', 'bisque', 'aquamarine',
+            'mistyrose', 'honeydew', 'lavenderblush', 'oldlace'
+        ];
+
+        // 存储所有窗口的数组
+        let windows = [];
+        let intervalId = null;
+        const windowCountElement = document.getElementById('windowCount');
+        const openBtn = document.getElementById('openBtn');
+        const giftContainer = document.querySelector('.gift-container');
+        
+        // 创建提示窗口函数
+        function createTipWindow() {
+            // 创建窗口元素
+            const windowElement = document.createElement('div');
+            windowElement.className = 'tip-window';
+            
+            // 随机选择提示和背景颜色
+            const tip = tips[Math.floor(Math.random() * tips.length)];
+            const bgColor = bgColors[Math.floor(Math.random() * bgColors.length)];
+            
+            // 设置窗口内容
+            windowElement.textContent = tip;
+            windowElement.style.backgroundColor = bgColor;
+            
+            // 随机位置
+            const windowWidth = 250;
+            const windowHeight = 60;
+            const screenWidth = window.innerWidth;
+            const screenHeight = window.innerHeight;
+            
+            const x = Math.floor(Math.random() * (screenWidth - windowWidth));
+            const y = Math.floor(Math.random() * (screenHeight - windowHeight));
+            
+            windowElement.style.left = `${x}px`;
+            windowElement.style.top = `${y}px`;
+            
+            // 添加到页面
+            document.body.appendChild(windowElement);
+            
+            // 添加到窗口数组
+            windows.push(windowElement);
+            
+            // 更新计数器
+            windowCountElement.textContent = windows.length;
+            
+            // 点击关闭单个窗口
+            windowElement.addEventListener('click', function() {
+                document.body.removeChild(windowElement);
+                windows = windows.filter(w => w !== windowElement);
+                windowCountElement.textContent = windows.length;
+            });
+        }
+
+        // 开始弹窗
+        function startWindows() {
+            if (intervalId) return; // 防止重复启动
+            
+            // 隐藏礼物容器
+            giftContainer.style.display = 'none';
+            
+            // 创建初始窗口
+            for (let i = 0; i < 10; i++) {
+                setTimeout(createTipWindow, i * 50);
+            }
+            
+            // 持续创建新窗口
+            intervalId = setInterval(() => {
+                if (windows.length < 100) { // 限制最大窗口数量
+                    createTipWindow();
+                }
+            }, 100);
+        }
+
+        // 停止弹窗
+        function stopWindows() {
+            if (intervalId) {
+                clearInterval(intervalId);
+                intervalId = null;
+            }
+        }
+
+        // 清除所有窗口
+        function clearAllWindows() {
+            stopWindows();
+            windows.forEach(window => {
+                if (window.parentNode) {
+                    document.body.removeChild(window);
+                }
+            });
+            windows = [];
+            windowCountElement.textContent = '0';
+            
+            // 显示礼物容器
+            giftContainer.style.display = 'flex';
+        }
+
+        // 绑定打开按钮事件
+        openBtn.addEventListener('click', startWindows);
+
+        // 绑定空格键事件
+        document.addEventListener('keydown', function(event) {
+            if (event.code === 'Space') {
+                clearAllWindows();
+            }
+        });
+    </script>
+</body>
+</html>
